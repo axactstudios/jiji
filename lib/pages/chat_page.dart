@@ -11,18 +11,23 @@ class ChatPage extends StatelessWidget {
       child: Scaffold(
         appBar: PreferredSize(
           child: JijiAppBar(),
-          preferredSize: Size.fromHeight(SizeConfig.deviceHeight * 12.5),
+          preferredSize: Size.fromHeight(SizeConfig.deviceHeight * 10),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            unreadChatsCounterWidget(),
-            SizedBox(
-              height: SizeConfig.deviceHeight * 2.5,
-            ),
-            ChatList()
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: SizeConfig.deviceHeight * 1,
+              ),
+              unreadChatsCounterWidget(),
+              SizedBox(
+                height: SizeConfig.deviceHeight * 1,
+              ),
+              ChatList()
+            ],
+          ),
         ),
       ),
     );
@@ -44,7 +49,7 @@ class ChatPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: SizeConfig.deviceHeight * 1.5),
           ),
-          ChatCounter()
+          ChatCounter(avatarSize: SizeConfig.deviceWidth*3.35,count: 5,),
         ],
       ),
     );
@@ -52,24 +57,25 @@ class ChatPage extends StatelessWidget {
 }
 
 class ChatCounter extends StatelessWidget {
-  const ChatCounter({
-    Key key,
-  }) : super(key: key);
+
+  int count;
+  double avatarSize;
+  ChatCounter({this.count,this.avatarSize}) ;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Hexcolor("#3DB83A"),
       child: Text(
-        "5",
+        '$count',
         style: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.deviceWidth * 2.5,
+          fontSize: SizeConfig.deviceHeight * 1.25,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.bold,
         ),
       ),
-      radius: SizeConfig.deviceWidth * 3,
+      radius: avatarSize,
     );
   }
 }
@@ -79,7 +85,16 @@ class ChatList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       children: [
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
+        ChatTile(),
         ChatTile(),
       ],
     );
@@ -102,14 +117,11 @@ class ChatTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: EdgeInsets.only(right: SizeConfig.deviceWidth * 2.5),
-              child: CircleAvatar(
-                radius: SizeConfig.deviceWidth * 7.5,
-              ),
+            CircleAvatar(
+              radius: SizeConfig.deviceWidth * 7.5,
             ),
-            Padding(
-              padding: EdgeInsets.only(right: SizeConfig.deviceWidth * 7.5),
+            Container(
+              width: SizeConfig.deviceWidth * 50,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -117,7 +129,7 @@ class ChatTile extends StatelessWidget {
                     'Amy James',
                     style: TextStyle(
                       color: Hexcolor("#3A3A3A"),
-                      fontSize: SizeConfig.deviceWidth * 3.5,
+                      fontSize: SizeConfig.deviceHeight * 1.85,
                       fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                     ),
@@ -126,18 +138,40 @@ class ChatTile extends StatelessWidget {
                     height: SizeConfig.deviceHeight * 1,
                   ),
                   Text(
-                    'Hi I am reaching out regarding',
+                    'Hi I am reaching out regarding the functionalty of bolt and screws',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Hexcolor("#A3A3A3"),
-                      fontSize: SizeConfig.deviceWidth * 3,
+                      fontSize: SizeConfig.deviceHeight * 1.5,
                       fontFamily: 'Roboto',
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ),
-            ChatCounter()
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '10.10 AM',
+                  style: TextStyle(
+                    color: Hexcolor("#A3A3A3"),
+                    fontSize: SizeConfig.deviceHeight * 1.45,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.deviceHeight * 1.5,
+                ),
+                ChatCounter(
+                  avatarSize: SizeConfig.deviceWidth*3,
+                  count: 5,
+                ),
+
+              ],
+            )
           ],
         ),
       ),
