@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:jiji/components/jijiappbar.dart';
+import 'package:jiji/pages/chat_box_page.dart';
 import 'package:jiji/utilities/size_config.dart';
 
 class ChatPage extends StatelessWidget {
@@ -49,7 +50,7 @@ class ChatPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: SizeConfig.deviceHeight * 1.5),
           ),
-          ChatCounter(avatarSize: SizeConfig.deviceWidth*3.35,count: 5,),
+          ChatCounter(avatarSize: SizeConfig.deviceWidth*3.35,count: 40,),
         ],
       ),
     );
@@ -108,71 +109,77 @@ class ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(border: Border.all(color: Hexcolor("#F0F0F0"))),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: SizeConfig.deviceHeight * 2,
-            horizontal: SizeConfig.deviceWidth * 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircleAvatar(
-              radius: SizeConfig.deviceWidth * 7.5,
-            ),
-            Container(
-              width: SizeConfig.deviceWidth * 50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (_)=>ChatBoxPage()));
+      },
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: Hexcolor("#F0F0F0"))),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: SizeConfig.deviceHeight * 2,
+              horizontal: SizeConfig.deviceWidth * 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: SizeConfig.deviceWidth * 7.5,
+                backgroundImage: AssetImage('assets/profile_image.png'),
+              ),
+              Container(
+                width: SizeConfig.deviceWidth * 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Amy James',
+                      style: TextStyle(
+                        color: Hexcolor("#3A3A3A"),
+                        fontSize: SizeConfig.deviceHeight * 1.85,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.deviceHeight * 1,
+                    ),
+                    Text(
+                      'Hi I am reaching out regarding the functionalty of bolt and screws',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Hexcolor("#A3A3A3"),
+                        fontSize: SizeConfig.deviceHeight * 1.5,
+                        fontFamily: 'Roboto',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Amy James',
+                    '10.10 AM',
                     style: TextStyle(
-                      color: Hexcolor("#3A3A3A"),
-                      fontSize: SizeConfig.deviceHeight * 1.85,
+                      color: Hexcolor("#A3A3A3"),
+                      fontSize: SizeConfig.deviceHeight * 1.45,
                       fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(
-                    height: SizeConfig.deviceHeight * 1,
+                    height: SizeConfig.deviceHeight * 1.5,
                   ),
-                  Text(
-                    'Hi I am reaching out regarding the functionalty of bolt and screws',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Hexcolor("#A3A3A3"),
-                      fontSize: SizeConfig.deviceHeight * 1.5,
-                      fontFamily: 'Roboto',
-                    ),
+                  ChatCounter(
+                    avatarSize: SizeConfig.deviceWidth*3,
+                    count: 5,
                   ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '10.10 AM',
-                  style: TextStyle(
-                    color: Hexcolor("#A3A3A3"),
-                    fontSize: SizeConfig.deviceHeight * 1.45,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: SizeConfig.deviceHeight * 1.5,
-                ),
-                ChatCounter(
-                  avatarSize: SizeConfig.deviceWidth*3,
-                  count: 5,
-                ),
 
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
