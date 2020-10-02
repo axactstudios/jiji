@@ -16,24 +16,8 @@ class Impl {
     return response;
   }
 
-  // Future<List<VehicleName>> getVehicalNamesList() async {
-  //   VehicalRepository _repository = new VehicalRepository();
-  //   final List<VehicleName> vehicalNames =
-  //       await _repository.fetchVehicalNames();
-  //   return vehicalNames;
-  // }
-
-  // Future<List<VehicleModel>> getVehicalModelsList() async {
-  //   VehicalRepository _repository = new VehicalRepository();
-  //   final List<VehicleModel> vehicalModels =
-  //       await _repository.fetchVehicalModels();
-  //   return vehicalModels;
-  // }
-
-  // Future<List<VehicleAddon>> getVehicalAddons() async {
-  //   VehicalRepository _repository = new VehicalRepository();
-  //   final List<VehicleAddon> vehicalAddons =
-  //       await _repository.fetchVehicalAddons();
-  //   return vehicalAddons;
-  // }
+  Future<Map<String, dynamic>> createPost(Map<String, dynamic> body, Map header) async {
+    final Map<String, dynamic> response = await _repository.createPost(body, header);
+    return response;
+  }
 }

@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jiji/utilities/theme_data.dart';
-import 'package:jiji/widgets/jiji_app_bar.dart';
+import 'package:jiji/constants/global.dart';
 import 'package:jiji/models/product.dart';
 import 'package:jiji/utilities/size_config.dart';
+import 'package:jiji/utilities/theme_data.dart';
 import 'package:jiji/widgets/custom_dropdrown.dart';
 import 'package:jiji/widgets/custom_textfield.dart';
 import 'package:jiji/widgets/item_images.dart';
+import 'package:jiji/widgets/jiji_app_bar.dart';
+import 'package:provider/provider.dart';
+
+import '../impl/impl.dart';
+import '../models/user_model.dart';
 
 class AddProductScreen extends StatefulWidget {
   static String routeName = '/AddProductScreen';
@@ -79,14 +85,53 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Future<void> _saveForm() async {
+    final Box<UserModel> _userBox = Provider.of<Box<UserModel>>(
+      context,
+      listen: false,
+    );
+    final UserModel _userModel = _userBox.values.first;
     bool valid = _form.currentState.validate();
     if (valid) {
       _form.currentState.save();
-      print(title);
-      print(price.toString());
-      print(description);
-      print(city + ", " + state);
-      print(category + " " + subCategory);
+      print('Form saved, sending request...');
+      print('Global User UID: $globalUid, token: ${_userModel.token}');
+      final Map<String, dynamic> response = await Impl().createPost(
+        {
+          'name': _userModel.name,
+          'description': description,
+          'price': price,
+          'photo': '',
+          'postedBy': _userModel.uid,
+          'title': title,
+          'city': city,
+          'state': state,
+          'category': category,
+          'subCategory': subCategory,
+        },
+        {
+          'token': _userModel.token,
+        },
+      );
+      print('RESPONSE: $response');
+      if (response["statusCode"] != 200) {
+        print('API post failed');
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              response["errors"],
+              style: TextStyle(
+                color: MyThemeData.primaryColor,
+                fontSize: SizeConfig.deviceHeight * 1.7,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.black.withOpacity(0.8),
+          ),
+        );
+      } else {
+        print('API post success');
+      }
     }
   }
 

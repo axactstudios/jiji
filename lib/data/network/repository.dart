@@ -16,14 +16,9 @@ class Repository {
     return response;
   }
 
-  // Future<List<VehicleName>> fetchVehicalNames() async {
-  //   List<VehicleName> vehicalNames = [];
-  //   Map<String, dynamic> response =
-  //       await _helper.get("http://happymoney.in/api/v1/vehicle/makes");
-  //   response["data"].toList().forEach((element) {
-  //     vehicalNames.add(VehicleName.fromJson(element));
-  //   });
-  //   return vehicalNames;
-  // }
-
+  Future<Map<String, dynamic>> createPost(Map<String, dynamic> body, Map header) async {
+    Map<String, dynamic> response =
+    await _helper.postWithHeadersInputs(Endpoints.createPost, body, header);
+    return response;
+  }
 }
