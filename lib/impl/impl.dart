@@ -16,8 +16,11 @@ class Impl {
     return response;
   }
 
-  Future<Map<String, dynamic>> createPost(Map<String, dynamic> body, Map header) async {
-    final Map<String, dynamic> response = await _repository.createPost(body, header);
+  Future<Map<String, dynamic>> createPost(
+      Map<String, dynamic> body, Map<String, String> header) async {
+    print('Creating post');
+    final Map<String, dynamic> response =
+        await _repository.createPost(body, header);
     return response;
   }
 }

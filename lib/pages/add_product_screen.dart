@@ -99,17 +99,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         {
           'name': _userModel.name,
           'description': description,
-          'price': price,
+          'price': price.toString(),
           'photo': '',
           'postedBy': _userModel.uid,
           'title': title,
+          'condition': '',
           'city': city,
           'state': state,
           'category': category,
           'subCategory': subCategory,
+          'views': '',
         },
         {
-          'token': _userModel.token,
+          'Authorization': 'Bearer ${_userModel.token}',
         },
       );
       print('RESPONSE: $response');

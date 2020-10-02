@@ -84,6 +84,22 @@ class ApiHelper {
     return responseJson;
   }
 
+  Future<dynamic> postWithHeadersFormData(
+      String url, Map mappedJson, Map<String, String> header) async {
+    var responseJson;
+    try {
+      final response = await http.post(
+        url,
+        body: FormData.fromMap(mappedJson),
+        headers: header,
+      );
+      responseJson = _returnResponse(response);
+    } catch (e) {
+      print(e);
+    }
+    return responseJson;
+  }
+
   dynamic _returnDioResponse(Response response) {
     print('status code - ${response.statusCode}');
     switch (response.statusCode) {
