@@ -18,10 +18,10 @@ class Repository {
     return response;
   }
 
-  Future<Map<String, dynamic>> createPost(
-      FormData body, Map<String, String> header) async {
-    Map<String, dynamic> response = await _helper.postWithHeadersFormData(
-        Endpoints.createPost, body, header);
-    return response;
-  }
+  // Future<Map<String, dynamic>> createPost(
+  //     FormData body, Map<String, String> header) async {
+  //   Map<String, dynamic> response = await _helper.postWithHeadersFormData(
+  //       Endpoints.createPost, body, header);
+  //   return response;
+  // }
 }

@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,10 +10,10 @@ import 'package:jiji/utilities/size_config.dart';
 import 'package:jiji/utilities/theme_data.dart';
 import 'package:jiji/widgets/custom_dropdrown.dart';
 import 'package:jiji/widgets/custom_textfield.dart';
+import 'package:jiji/widgets/item_images.dart';
 import 'package:jiji/widgets/jiji_app_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../impl/impl.dart';
 import '../models/user_model.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -95,26 +95,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
       print('Form saved, sending request...');
       print('Global User UID: $globalUid, token: ${_userModel.token}');
 
-      FormData formData;
-      formData.append('name', _userModel.name);
-      formData.append('description', description);
-      formData.append('price', price.toString());
-      formData.append('photo', '');
-      formData.append('postedBy', _userModel.uid);
-      formData.append('title', title);
-      formData.append('condition', _userModel.name);
-      formData.append('city', city);
-      formData.append('state', state);
-      formData.append('category', category);
-      formData.append('subCategory', subCategory);
-      formData.append('views', '');
+      var response;
+      // send POST request here
 
-      final Map<String, dynamic> response = await Impl().createPost(
-        formData,
-        {
-          'Authorization': 'Bearer ${_userModel.token}',
-        },
-      );
       print('RESPONSE: $response');
       if (response["statusCode"] != 200) {
         print('API post failed');
