@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:jiji/data/network/repository.dart';
 
@@ -17,7 +18,7 @@ class Impl {
   }
 
   Future<Map<String, dynamic>> createPost(
-      Map<String, dynamic> body, Map<String, String> header) async {
+      FormData body, Map<String, String> header) async {
     print('Creating post');
     final Map<String, dynamic> response =
         await _repository.createPost(body, header);

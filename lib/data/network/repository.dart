@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:jiji/constants/endpoints.dart';
 import 'package:jiji/data/network/api_helper.dart';
 
@@ -17,7 +19,7 @@ class Repository {
   }
 
   Future<Map<String, dynamic>> createPost(
-      Map<String, dynamic> body, Map<String, String> header) async {
+      FormData body, Map<String, String> header) async {
     Map<String, dynamic> response = await _helper.postWithHeadersFormData(
         Endpoints.createPost, body, header);
     return response;

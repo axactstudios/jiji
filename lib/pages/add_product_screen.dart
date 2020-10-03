@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +10,6 @@ import 'package:jiji/utilities/size_config.dart';
 import 'package:jiji/utilities/theme_data.dart';
 import 'package:jiji/widgets/custom_dropdrown.dart';
 import 'package:jiji/widgets/custom_textfield.dart';
-import 'package:jiji/widgets/item_images.dart';
 import 'package:jiji/widgets/jiji_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -95,21 +94,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _form.currentState.save();
       print('Form saved, sending request...');
       print('Global User UID: $globalUid, token: ${_userModel.token}');
+
+      FormData formData;
+      formData.append('name', _userModel.name);
+      formData.append('description', description);
+      formData.append('price', price.toString());
+      formData.append('photo', '');
+      formData.append('postedBy', _userModel.uid);
+      formData.append('title', title);
+      formData.append('condition', _userModel.name);
+      formData.append('city', city);
+      formData.append('state', state);
+      formData.append('category', category);
+      formData.append('subCategory', subCategory);
+      formData.append('views', '');
+
       final Map<String, dynamic> response = await Impl().createPost(
-        {
-          'name': _userModel.name,
-          'description': description,
-          'price': price.toString(),
-          'photo': '',
-          'postedBy': _userModel.uid,
-          'title': title,
-          'condition': '',
-          'city': city,
-          'state': state,
-          'category': category,
-          'subCategory': subCategory,
-          'views': '',
-        },
+        formData,
         {
           'Authorization': 'Bearer ${_userModel.token}',
         },
