@@ -51,10 +51,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   String category;
   String subCategory;
   double textSize;
+
   List<String> filenames = [];
+
   String image64;
   // File imageResized;
   List<MultipartFile> fileList = [];
+
+  bool _isLoading = false;
 
   MyProductModel _product;
   final picker = ImagePicker();
@@ -112,17 +116,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
     setState(() {});
     //Image file to base64 string
+
     // imageResized = await FlutterNativeImage.compressImage(pickedFile.path,
     //     quality: 100, targetWidth: 120, targetHeight: 120);
     // // print(imageResized.path);
     // List<int> imageBytes = imageResized.readAsBytesSync();
     // image64 = base64Encode(imageBytes);
+
   }
 
   Future<void> _saveForm(UserModel user) async {
     bool valid = _form.currentState.validate();
+
     // print(imageResized.path);
     if (valid) {
+      setState(() {
+        _isLoading = !_isLoading;
+      });
       _form.currentState.save();
       // Map<String, String> mapHeader = {
       //   'Authorization': "Bearer " + "${user.token}",
@@ -131,6 +141,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       var uri = Uri.parse(Endpoints.savePost);
 
       var request = new http.MultipartRequest("POST", uri);
+
 
       for (var file in images) {
         String fileName = file.path.split("/").last;
@@ -180,10 +191,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       var response = await request.send();
 
+
+      final String response = await Impl().savePost(mapJson, mapHeader, user.uid);
+      setState(() {
+        _isLoading = !_isLoading;
+
       print(response.statusCode);
       if (response.statusCode == 200) {}
       response.stream.transform(utf8.decoder).listen((value) {
         print(value);
+
       });
 
       setState(() {
@@ -408,19 +425,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       Radius.circular(5),
                     ),
                   ),
-                  child: RaisedButton(
+                  child: FlatButton(
                     onPressed: () async {
                       _saveForm(_userModel);
                     },
-                    child: Text(
-                      "POST AD",
-                      style: TextStyle(
-                        fontSize: textSize * 1.2,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    color: MyThemeData.primaryColor,
+                    child: _isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Text(
+                            "POST AD",
+                            style: TextStyle(
+                              fontSize: textSize * 1.2,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                    color: _isLoading?Colors.white54:MyThemeData.primaryColor,
                   ),
                 ),
               ),

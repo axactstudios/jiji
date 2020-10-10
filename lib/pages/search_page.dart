@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:jiji/utilities/size_config.dart';
+import 'package:jiji/widgets/bottom_nav.dart';
 import 'package:jiji/widgets/jiji_app_bar.dart';
+import 'package:jiji/widgets/jiji_search_app_bar.dart';
 
 class SearchPage extends StatelessWidget {
-  bool resultsFound = false;
+  bool resultsFound = true;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class SearchPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-          child: JijiAppBar(),
+          child: JijiSearchAppBar(),
           preferredSize: Size.fromHeight(SizeConfig.deviceHeight * 10),
         ),
         body: resultsFound == true
@@ -66,7 +68,9 @@ class SearchPage extends StatelessWidget {
                 ],
               )
             : NoResultsFound(),
+            // bottomNavigationBar: BottomNav(),
       ),
+      
     );
   }
 

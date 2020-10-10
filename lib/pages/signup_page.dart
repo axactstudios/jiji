@@ -18,10 +18,14 @@ class _SignUpState extends State<SignUp> {
   String emailId = "";
   final _form = GlobalKey<FormState>();
   double textSize;
+  bool _isLoading = false;
 
   Future<void> _saveForm(BuildContext context) async {
     bool valid = _form.currentState.validate();
     if (valid) {
+      setState(() {
+        _isLoading = !_isLoading;
+      });
       _form.currentState.save();
       print(firstName + " " + lastName);
       print(password);
@@ -35,7 +39,7 @@ class _SignUpState extends State<SignUp> {
         "phone": phone.trim(),
       });
       print(response);
-      if (response["statusCode"] == 200)
+      if (response["statusCode"] != 200)
         await showDialog(
           context: context,
           child: AlertDialog(
@@ -66,7 +70,10 @@ class _SignUpState extends State<SignUp> {
             builder: (context) => LoginPage(),
           ),
         );
-      else
+      else {
+        setState(() {
+          _isLoading = !_isLoading;
+        });
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
             response["errors"],
@@ -78,6 +85,7 @@ class _SignUpState extends State<SignUp> {
           ),
           backgroundColor: Colors.black.withOpacity(0.8),
         ));
+      }
       print(response["errors"]);
     }
   }
@@ -240,17 +248,22 @@ class _SignUpState extends State<SignUp> {
                         Radius.circular(5),
                       ),
                     ),
-                    child: RaisedButton(
+                    child: FlatButton(
                       onPressed: () async => await _saveForm(context),
-                      child: Text(
-                        "SIGN UP",
-                        style: TextStyle(
-                          fontSize: textSize * 1.2,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      color: MyThemeData.primaryColor,
+                      child: _isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Text(
+                              "SIGN UP",
+                              style: TextStyle(
+                                fontSize: textSize * 1.2,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                      color:
+                          _isLoading ? Colors.white54 : MyThemeData.primaryColor,
                     ),
                   ),
                 ),
