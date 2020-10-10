@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:hive/hive.dart';
 import 'package:jiji/impl/impl.dart';
 import 'package:jiji/models/UserProfile.dart';
+import 'package:jiji/models/categories_list.dart';
 import 'package:jiji/models/category.dart';
 import 'package:jiji/models/product.dart';
 import 'package:jiji/models/user_model.dart';
-import 'package:jiji/pages/product_details.dart';
+import 'package:jiji/models/user_posts.dart';
+
 import 'package:jiji/pages/sub_category_page.dart';
 import 'package:jiji/pages/view_all_page.dart';
 import 'package:jiji/utilities/size_config.dart';
@@ -37,7 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   void initState() {
     super.initState();
-    getCategoriesList();
+    // getCategoriesList();
     getPopularProductList();
     _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
     _selectedItem = _dropdownMenuItems[0].value;
@@ -56,10 +59,10 @@ class _HomePageState extends State<HomePage> {
   //   // print(userProfile.name);
   // }
 
-  getCategoriesList() async {
-    categories = await Impl().getCategoriesList();
-    setState(() {});
-  }
+  // getCategoriesList() async {
+  //   categories = await Impl().getCategoriesList();
+  //   setState(() {});
+  // }
 
   getPopularProductList() async {
     popularProducts = await Impl().getPopularProductsList();
@@ -85,6 +88,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    categories = Provider.of<Categories>(context).categoriesList;
+    final Box<UserModel> _userBox =
+        Provider.of<Box<UserModel>>(context, listen: false);
+    Provider.of<UserPosts>(context)
+        .initialize(_userBox.values.first.uid, _userBox.values.first.token);
+
     return WillPopScope(
       onWillPop: () {
         return showDialog(
@@ -334,7 +343,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class HeaderText extends StatelessWidget {
-  String title;
+  final String title;
   HeaderText({this.title});
 
   @override
@@ -412,14 +421,16 @@ class CategoryCard extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.deviceWidth * 10),
+                      horizontal: SizeConfig.deviceWidth * 10,
+                    ),
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: SizedBox(
                         height: SizeConfig.deviceWidth * 35,
-                        child: Image.network(
-                          "https://olx-app-jiji.herokuapp.com/api/category/photo/$categoryId?photoId=$categoryId",
+                        child: CachedNetworkImage(
                           fit: BoxFit.cover,
+                          imageUrl:
+                              "https://olx-app-jiji.herokuapp.com/api/category/photo/$categoryId?photoId=$categoryId",
                         ),
                       ),
                     ),

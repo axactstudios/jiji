@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart' as _dio;
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiji/data/network/network_exceptions.dart';
@@ -22,10 +23,10 @@ class ApiHelper {
   Future<dynamic> getWithHeadersInputs(String url, Map<String, dynamic> header,
       Map<String, dynamic> parameters) async {
     var responseJson;
-    Dio dio = new Dio();
+    _dio.Dio dio = new _dio.Dio();
     try {
       var response = await dio.get(url,
-          queryParameters: parameters, options: Options(headers: header));
+          queryParameters: parameters, options: _dio.Options(headers: header));
       responseJson = _returnDioResponse(response);
     } catch (e) {
       print(e);
@@ -36,12 +37,12 @@ class ApiHelper {
   Future<dynamic> postWithHeadersInputsDio(String url,
       Map<String, dynamic> header, Map<String, dynamic> parameters) async {
     var responseJson;
-    Dio dio = new Dio();
+    _dio.Dio dio = new _dio.Dio();
     try {
       var response = await dio.post(
         url,
         queryParameters: parameters,
-        options: Options(
+        options: _dio.Options(
           headers: header,
         ),
       );
@@ -90,12 +91,12 @@ class ApiHelper {
     return responseJson;
   }
 
-  Future<dynamic> postWithHeadersInputs(
-      String url, Map<String,dynamic> mappedJson, Map<String,String> header) async {
+  Future<dynamic> postWithHeadersInputs(String url,
+      Map<String, dynamic> mappedJson, Map<String, String> header) async {
     var responseJson;
 
     try {
-      print("b4");
+      // print("b4");
       final response = await http.post(
         url,
         body: jsonEncode(mappedJson),
@@ -129,13 +130,31 @@ class ApiHelper {
     return responseJson;
   }
 
-  dynamic _returnDioResponse(Response response) {
-    print('status code - ${response.statusCode}');
+  // Future<String> multipartRequest(
+  //     {var url,
+  //     var partParams,
+  //     Iterable<_dio.MultipartFile> files,
+  //     var headers}) async {
+  //   var request = http.MultipartRequest("POST", Uri.parse(url));
+  //   request.headers.addAll(headers);
+  //   print("1");
+  //   if (partParams != null) request.fields.addAll(partParams);
+  //   print("11"); // add part params if not null
+  //   if (files != null) request.files.addAll(Iterable<MultipartFile>files); // add files if not null
+  //   print("2");
+  //   var response = await request.send();
+  //   var responseData = await response.stream.toBytes();
+  //   var responseString = String.fromCharCodes(responseData);
+  //   print("responseBody " + responseString);
+  //   if (response.statusCode == 200) return responseString;
+  // }
+
+  dynamic _returnDioResponse(_dio.Response response) {
+    // print('status code - ${response.statusCode}');
     switch (response.statusCode) {
       case 200:
-        var responseJson = response.data.toString();
         // print(responseJson);
-        return responseJson;
+        return response.data;
 
       case 400:
         throw BadRequestException(response.data.toString());

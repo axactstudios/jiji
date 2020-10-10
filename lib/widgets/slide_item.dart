@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:jiji/utilities/size_config.dart';
 
 import '../models/slide.dart';

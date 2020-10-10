@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:hive/hive.dart';
+import 'package:jiji/models/categories_list.dart';
 import 'package:jiji/models/user_model.dart';
+import 'package:jiji/models/user_posts.dart';
 import 'package:jiji/pages/onboarding_page.dart';
 import 'package:jiji/widgets/bottom_nav.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 import 'impl/impl.dart';
+import 'models/subcategories_list.dart';
 import 'models/user.dart';
 
 void main() async {
@@ -88,8 +91,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   tryAutoLogin() async {
-    if(!widget.userBox.isEmpty)
-    widget.userBox = await _tryLogin(widget.userBox);
+    if (widget.userBox.isNotEmpty)
+      widget.userBox = await _tryLogin(widget.userBox);
     setState(() {});
   }
 
@@ -101,8 +104,17 @@ class _MyAppState extends State<MyApp> {
         Provider<User>(
           create: (context) => User()..updateUser(widget.userBox.values.first),
         ),
+        Provider<Categories>(
+          create: (context) => Categories()..initialiseData(),
+        ),
+        Provider<SubCategories>(
+          create: (context) => SubCategories()..initialiseData(),
+        ),
+        Provider<UserPosts>(
+          create: (context) => UserPosts(),
+        ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Jiji',
         theme: ThemeData(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jiji/models/category.dart';
-import 'package:jiji/models/sub_category.dart';
 import 'package:jiji/pages/home_page.dart';
 import 'package:jiji/pages/sub_category_page.dart';
 import 'package:jiji/utilities/size_config.dart';

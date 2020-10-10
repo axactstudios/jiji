@@ -104,10 +104,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
     textFieldheight = availableWidthSpace / aspectRatio;
     final textSize = textFieldheight * 0.3;
     // print("Text Size" + textSize.toString());
-    print(aspectRatio.toString() + "  " + textFieldheight.toString());
+    // print(aspectRatio.toString() + "  " + textFieldheight.toString());
     final textFieldPadding = EdgeInsets.symmetric(
-      horizontal: availableWidthSpace * 0.030,
-    );
+        horizontal: availableWidthSpace * 0.030,
+        vertical: widget.textInputType == TextInputType.multiline
+            ? availableWidthSpace * 0.03
+            : 0);
 
     return widget.isAspectRatio
         ? AspectRatio(

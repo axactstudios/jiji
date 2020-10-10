@@ -17,12 +17,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _form = GlobalKey<FormState>();
+  bool _isLoading = false;
   String phoneOrEmail = "";
   String password = "";
 
   Future<void> _saveForm(BuildContext context) async {
     bool valid = _form.currentState.validate();
     if (valid) {
+      setState(() {
+        _isLoading = !_isLoading;
+      });
       _form.currentState.save();
       print(phoneOrEmail);
       print(password);
@@ -31,7 +35,9 @@ class _LoginPageState extends State<LoginPage> {
         "password": password,
       });
 
-      if (response["statusCode"] != 200)
+      print(response["statusCode"]);
+
+      if (response["statusCode"] != 200) {
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -46,7 +52,10 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.black.withOpacity(0.8),
           ),
         );
-      else {
+        setState(() {
+          _isLoading = !_isLoading;
+        });
+      } else {
         final UserModel userModel = UserModel(
           token: response['token'],
           uid: response['user']['_id'],
@@ -66,6 +75,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           (Route<dynamic> route) => false,
         );
+
+        print("object");
       }
     }
   }
@@ -162,11 +173,13 @@ class _LoginPageState extends State<LoginPage> {
                   aspectRatioValue: 8,
                 ),
                 SizedBox(height: SizeConfig.deviceHeight * 7),
-                AspectRatio(
-                  aspectRatio: 8,
-                  child: Builder(
-                    builder: (context) =>
-                        buildButtonContainer(_saveForm, context),
+                Container(
+                  child: AspectRatio(
+                    aspectRatio: 8,
+                    child: Builder(
+                      builder: (context) =>
+                          buildButtonContainer(_saveForm, context, _isLoading),
+                    ),
                   ),
                 ),
                 Padding(
@@ -218,25 +231,31 @@ class _LoginPageState extends State<LoginPage> {
     _userBox.add(userModel);
   }
 
-  Widget buildButtonContainer(Function signInFunc, BuildContext context) {
+  Widget buildButtonContainer(
+      Function signInFunc, BuildContext context, bool isLoading) {
     return InkWell(
-      onTap: () => signInFunc(context),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Hexcolor("#3DB83A"),
-        ),
-        child: Center(
-          child: Text(
-            "SIGN IN",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: SizeConfig.deviceHeight * 1.5,
-              fontWeight: FontWeight.bold,
+      onTap: () {
+        
+        signInFunc(context);
+      },
+      child: isLoading
+          ? Center(child: CircularProgressIndicator(),)
+          : Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Hexcolor("#3DB83A"),
+              ),
+              child: Center(
+                child: Text(
+                  "SIGN IN",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.deviceHeight * 1.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

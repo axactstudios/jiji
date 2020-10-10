@@ -1,8 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:hive/hive.dart';
 import 'package:jiji/data/network/api_helper.dart';
+
+
+import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+
+
 import 'package:jiji/impl/impl.dart';
 import 'package:jiji/models/product.dart';
 import 'package:jiji/models/user_model.dart';
@@ -27,6 +33,8 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int selectedImageIndex = 0;
+  Box<UserModel> _user;
+  UserModel _userModel;
 
   bool isFavourite = false;
   List<Product> similarProducts = [];
@@ -34,7 +42,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     getSimilarProducts();
-    isFavourite = true;
+    isFavourite = true; //_isFavourite(_userModel);
     widget.product.photo.forEach((element) {
       img.add(element.id);
     });
@@ -54,37 +62,46 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void toggleFavourite(UserModel user) async {
+    setState(() {
+      isFavourite = !isFavourite;
+    });
     Map<String, String> header = {'Authorization': "Bearer ${user.token}"};
 
     Map<String, dynamic> body = {'postId': widget.product.id};
 
-    if (isFavourite) {
-      await Impl().putUnlike(header, body).then((value) {
-        print(value);
-        setState(() {
-          isFavourite = !isFavourite;
-        });
-      });
-    } else {
-      await Impl().putLike(header, body).then((value) {
-        print(value);
-        setState(() {
-          isFavourite = !isFavourite;
-        });
-      });
-    }
-    //
+    dynamic _response;
 
-    // setState(() {
-    //   isFavourite = !isFavourite;
-    // });
+    if (isFavourite) {
+      _response = await Impl().putUnlike(header, body, user.uid);
+      /*
+      ***MUST BE IMPLEMENTED AFTERWARDS DEPENDING UPON RESULT***
+      if(succesful){
+        print("Added to Fav");
+      }
+      else{
+        setState(){
+          isFavourite = !isFavourite;
+        }
+      }*/
+    } else {
+      _response = await Impl().putLike(header, body, user.uid);
+      /*
+      ***MUST BE IMPLEMENTED AFTERWARDS DEPENDING UPON RESULT***
+      if(succesful){
+        print("Added to Fav");
+      }
+      else{
+        setState(){
+          isFavourite = !isFavourite;
+        }
+      }*/
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Box<UserModel> _user =
-        Provider.of<Box<UserModel>>(context, listen: false);
-    final UserModel _userModel = _user.values.first;
+    _user = Provider.of<Box<UserModel>>(context, listen: false);
+    _userModel = _user.values.first;
     SizeConfig().init(context);
     final deviceHorizontalPadding = SizeConfig.deviceWidth * 4;
     final availableWidthSpace =
@@ -239,7 +256,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Icons.phone,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () => urlLauncher
+                              .launch('tel:${widget.product.postedBy.phone}'),
                           text: 'CALL',
                           isBorder: false,
                           color: MyThemeData.primaryColor,
@@ -251,7 +269,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ChatBoxPage(),
+                              builder: (context) => ChatBoxPage(
+                                recId: widget.product.postedBy.id,
+                                name: widget.product.postedBy.name,
+                              ),
                             ),
                           ),
                           isBorder: true,
@@ -309,5 +330,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
     );
+  }
+
+  bool _isFavourite(UserModel user) {
+    List likedPost = widget.product.postedBy.likedPost;
+    likedPost.forEach((element) {
+      if (element == user.uid) {
+        return true;
+      }
+    });
+    return false;
   }
 }

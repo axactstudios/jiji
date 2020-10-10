@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jiji/impl/impl.dart';
 import 'package:jiji/models/sub_category.dart';
+import 'package:jiji/models/subcategories_list.dart';
 import 'package:jiji/pages/home_page.dart';
 import 'package:jiji/pages/show_selected_category_products.dart';
 import 'package:jiji/utilities/size_config.dart';
 import 'package:jiji/widgets/jiji_app_bar.dart';
+import 'package:provider/provider.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final String categoryId;
@@ -25,21 +26,22 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   @override
   void initState() {
     super.initState();
-    getSubCategoriesList();
+    // getSubCategoriesList();
   }
 
-  getSubCategoriesList() async {
-    // print(subCategories.length);
-    final data = await Impl().getSubCategoriesList();
-    data.forEach((element) {
-      subCategories.add(element);
-    });
-    // print(subCategories.length);
-    setState(() {});
-  }
+  // getSubCategoriesList() async {
+  //   // print(subCategories.length);
+  //   final data = await Impl().getSubCategoriesList();
+  //   data.forEach((element) {
+  //     subCategories.add(element);
+  //   });
+  //   // print(subCategories.length);
+  //   setState(() {});
+  // }
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    subCategories = Provider.of<SubCategories>(context).subCategoriesList;
     return Scaffold(
       appBar: PreferredSize(
         child: JijiAppBar(),

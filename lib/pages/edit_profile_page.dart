@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:hive/hive.dart';
-import 'package:jiji/constants/endpoints.dart';
 import 'package:jiji/data/network/api_helper.dart';
 import 'package:jiji/models/UserProfile.dart';
 import 'package:jiji/models/user_model.dart';
@@ -356,7 +355,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 }
 
 class ProfileImage extends StatelessWidget {
-  double avatarRadius = SizeConfig.deviceWidth * 15;
+  final double avatarRadius = SizeConfig.deviceWidth * 15;
 
   @override
   Widget build(BuildContext context) {

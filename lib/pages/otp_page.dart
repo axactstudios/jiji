@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:jiji/widgets/bottom_nav.dart';
-import 'package:jiji/pages/home_page.dart';
 import 'package:jiji/utilities/size_config.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';

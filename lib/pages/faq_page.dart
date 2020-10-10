@@ -73,7 +73,8 @@ class FaqPage extends StatelessWidget {
 }
 
 class CustomExpansionTile extends StatelessWidget {
-  String childText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+  final String childText =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
       "Praesent auctor porta sem, et dictum neque porttitor non. Donec id tellus"
       " nec elit efficitur finibus. Sed vel eros et sem auctor molestie. Vestibulum"
       " tempor leo quis metus aliquam feugiat. Pellentesque in condimentum tortor,"

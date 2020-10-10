@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiji/models/product.dart';
 import 'package:jiji/utilities/theme_data.dart';
@@ -44,8 +45,8 @@ class SimilarProductCard extends StatelessWidget {
                   width: double.infinity,
                   child: img == ""
                       ? SizedBox()
-                      : Image.network(
-                          img,
+                      : CachedNetworkImage(
+                          imageUrl: img,
                           fit: BoxFit.cover,
                         ),
                 ),
